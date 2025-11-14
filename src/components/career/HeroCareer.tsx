@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 export default function HeroCareer() {
@@ -35,8 +36,9 @@ export default function HeroCareer() {
               Need Workers for My Business →
             </div>
 
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1521790361543-f645cf042ec4?auto=format&fit=crop&w=800&q=80"
+              fill
               alt="Career"
               className="w-[360px] md:w-[420px] rounded-3xl shadow-2xl"
             />

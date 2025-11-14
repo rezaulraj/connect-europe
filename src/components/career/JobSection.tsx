@@ -213,7 +213,7 @@ const JobCard: React.FC<{
   onShare: () => void;
 }> = ({ job, onApply, onShare }) => {
   const [isHovered, setIsHovered] = useState(false);
-
+  console.log("isHovered", isHovered);
   return (
     <div
       className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full"
