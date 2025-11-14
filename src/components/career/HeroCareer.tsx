@@ -37,10 +37,11 @@ export default function HeroCareer() {
             </div>
 
             <Image
-              src="https://images.unsplash.com/photo-1521790361543-f645cf042ec4?auto=format&fit=crop&w=800&q=80"
-              fill
+              src="/images/career.avif"
+              width={460}
+              height={480}
               alt="Career"
-              className="w-[360px] md:w-[420px] rounded-3xl shadow-2xl"
+              className="w-[460px] h-full rounded-3xl shadow-2xl"
             />
           </div>
         </div>
