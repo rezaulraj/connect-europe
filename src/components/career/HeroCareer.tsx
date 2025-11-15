@@ -100,7 +100,16 @@ export default function HeroCareer() {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file) {
-      handleFileChange({ target: { files: [file] } } as any);
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(file);
+
+      const syntheticEvent = {
+        target: {
+          files: dataTransfer.files,
+        },
+      } as React.ChangeEvent<HTMLInputElement>;
+
+      handleFileChange(syntheticEvent);
     }
   };
 
@@ -156,13 +165,36 @@ export default function HeroCareer() {
   ];
 
   const jobPreferences = [
-    "Software Development",
-    "Design",
-    "Marketing",
-    "Sales",
-    "Customer Support",
-    "Data Science",
-    "Project Management",
+    "Construction Worker",
+    "Electrician",
+    "Plumber",
+    "Welder",
+    "Carpenter",
+    "Painter",
+    "Car Painter",
+    "Mason",
+    "Factory Worker",
+    "Warehouse Worker",
+    "Forklift Operator",
+    "Delivery Driver",
+    "Cleaner",
+    "Housekeeping",
+    "Security Guard",
+    "Gardener",
+    "Mechanic",
+    "Auto Technician",
+    "Kitchen Helper",
+    "Cook",
+    "Baker",
+    "Butcher",
+    "Farm Worker",
+    "Packer",
+    "Loading & Unloading Worker",
+    "Machine Operator",
+    "AC Technician",
+    "Pipe Fitter",
+    "Tailor",
+    "Waiter / Service Staff",
     "Other",
   ];
 
@@ -236,7 +268,7 @@ export default function HeroCareer() {
                 </button>
               </div>
               <p className="text-white/80 mt-2">
-                Fill out the form below and we well notify you when matching
+                Fill out the form below and we&apos;ll notify you when matching
                 opportunities become available.
               </p>
             </div>
