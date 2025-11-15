@@ -236,7 +236,7 @@ export default function HeroCareer() {
                 </button>
               </div>
               <p className="text-white/80 mt-2">
-                Fill out the form below and we'll notify you when matching
+                Fill out the form below and we well notify you when matching
                 opportunities become available.
               </p>
             </div>
