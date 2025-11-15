@@ -264,11 +264,11 @@ export default function Navbar() {
         <div className="flex space-x-2 text-white">
           <Menu className="cursor-pointer" onClick={() => setOpen(true)} />
         </div>
-        <Link href="/">
+        <Link href="/" className="absolute left-1/2 -translate-x-1/2">
           <Image
             src="/logo.png"
             alt="logo"
-            width={100}
+            width={120}
             height={100}
             className="cursor-pointer"
           />
