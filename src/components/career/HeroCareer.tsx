@@ -47,11 +47,11 @@ export default function HeroCareer() {
       }
 
       setCvFile(file);
-      simulateUpload(file);
+      simulateUpload();
     }
   };
 
-  const simulateUpload = (file: File) => {
+  const simulateUpload = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
