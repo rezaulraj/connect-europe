@@ -51,7 +51,7 @@ export default function JobSection() {
       setLoading(true);
       try {
         const response = await fetch(
-          "https://script.google.com/macros/s/AKfycbxSihU_-lx49-gr1h4oe6w1H621Nxy2QHfMEx87gGGQKzfvwyQ3V3TMOxx9ypsR_JFdow/exec?site=Divine_Group"
+          "https://script.google.com/macros/s/AKfycbxSihU_-lx49-gr1h4oe6w1H621Nxy2QHfMEx87gGGQKzfvwyQ3V3TMOxx9ypsR_JFdow/exec?site=Divine_Group",
         );
         const data = await response.json();
         setJobs(data);
@@ -67,7 +67,7 @@ export default function JobSection() {
   }, []);
 
   const filteredJobs = jobs.filter(
-    (job) => activeCategory === "all" || job.JobCategory === activeCategory
+    (job) => activeCategory === "all" || job.JobCategory === activeCategory,
   );
 
   const displayedJobs = filteredJobs.slice(0, visibleCount);
@@ -186,18 +186,7 @@ export default function JobSection() {
       )}
 
       {showApplyForm && selectedJob && (
-        <ApplyForm
-          job={selectedJob}
-          onClose={() => setShowApplyForm(false)}
-          onSubmit={(formData) => {
-            console.log("Application submitted:", {
-              job: selectedJob,
-              ...formData,
-            });
-            setShowApplyForm(false);
-            alert("Application submitted successfully!");
-          }}
-        />
+        <ApplyForm job={selectedJob} onClose={() => setShowApplyForm(false)} />
       )}
 
       {showSharePopup && selectedJob && (
@@ -345,47 +334,11 @@ const JobCard: React.FC<{
 const ApplyForm: React.FC<{
   job: Job;
   onClose: () => void;
-  onSubmit: (data: ApplyFormData) => void;
-}> = ({ job, onClose, onSubmit }) => {
-  const [formData, setFormData] = useState<ApplyFormData>({
-    fullName: "",
-    email: "",
-    phone: "",
-    coverLetter: "",
-    cv: null,
-  });
-
-  const [uploadProgress, setUploadProgress] = useState(0);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (formData.cv) {
-      setUploadProgress(0);
-      const interval = setInterval(() => {
-        setUploadProgress((prev) => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            onSubmit(formData);
-            return 100;
-          }
-          return prev + 20;
-        });
-      }, 200);
-    } else {
-      onSubmit(formData);
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({ ...prev, cv: file }));
-    setUploadProgress(0);
-  };
-
+}> = ({ job, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        {/* Header */}
         <div className="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-blue-50">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-[#002a64]">
@@ -393,165 +346,143 @@ const ApplyForm: React.FC<{
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors text-2xl"
+              className="text-gray-400 hover:text-gray-600 text-2xl"
             >
               ✕
             </button>
           </div>
 
           <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
-            <div className="flex items-center space-x-3 mb-3">
-              <ReactCountryFlag
-                countryCode={getCountryCode(job.Country)}
-                svg
-                style={{
-                  width: "24px",
-                  height: "24px",
-                  borderRadius: "50%",
-                }}
-                title={job.Country}
-              />
-              <span className="font-semibold text-[#002a64]">
-                {job.Country}
-              </span>
-            </div>
             <h3 className="text-lg font-bold text-[#002a64] mb-1">
               {job.Title}
             </h3>
-            <p className="text-gray-600 text-sm">{job.Industry}</p>
-            <div className="flex items-center space-x-4 mt-2 text-sm text-gray-500">
-              <span>{job.JobType}</span>
-              <span>•</span>
-              <span>{job.Experience}</span>
-              <span>•</span>
-              <span className="text-[#1b6b12] font-semibold">{job.Salary}</span>
-            </div>
+            <p className="text-sm text-gray-600">{job.Country}</p>
+            <p className="text-sm text-[#1b6b12] font-semibold mt-1">
+              {job.Salary}
+            </p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        {/* FORM */}
+        <form
+          action="https://formsubmit.co/da8df489f587737b7c1d54a0e94773b2"
+          method="POST"
+          encType="multipart/form-data"
+          className="p-6 space-y-5"
+        >
+          {/* FormSubmit config */}
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_honey" style={{ display: "none" }} />
+          <input
+            type="hidden"
+            name="_subject"
+            value={`Job Application: ${job.Title} - ${job.Country}`}
+          />
+          <input
+            type="hidden"
+            name="_next"
+            value="https://connecteurope.uk/thank-you"
+          />
+          <input
+            type="hidden"
+            name="_autoresponse"
+            value={`Thank you for applying for the ${job.Title} position at Connect Europe. We have received your application.`}
+          />
+
+          {/* Job details */}
+          <input type="hidden" name="Job Title" value={job.Title} />
+          <input type="hidden" name="Country" value={job.Country} />
+          <input type="hidden" name="Industry" value={job.Industry} />
+          <input type="hidden" name="Salary" value={job.Salary} />
+          <input type="hidden" name="Job Type" value={job.JobType} />
+          <input type="hidden" name="Experience" value={job.Experience} />
+
+          {/* Full Name */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Full Name *
             </label>
             <input
               type="text"
+              name="Full Name"
               required
-              value={formData.fullName}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, fullName: e.target.value }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12] focus:border-[#1b6b12] transition-colors"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12]"
               placeholder="Enter your full name"
             />
           </div>
 
+          {/* Email */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Email Address *
             </label>
             <input
               type="email"
+              name="Email"
               required
-              value={formData.email}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, email: e.target.value }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12] focus:border-[#1b6b12] transition-colors"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12]"
               placeholder="Enter your email"
             />
           </div>
 
+          {/* Phone */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Phone Number *
             </label>
             <input
               type="tel"
+              name="Phone"
               required
-              value={formData.phone}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, phone: e.target.value }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12] focus:border-[#1b6b12] transition-colors"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12]"
               placeholder="Enter your phone number"
             />
           </div>
 
+          {/* Cover Letter */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Cover Letter *
             </label>
             <textarea
-              required
+              name="Cover Letter"
               rows={4}
-              value={formData.coverLetter}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  coverLetter: e.target.value,
-                }))
-              }
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12] focus:border-[#1b6b12] transition-colors"
-              placeholder="Tell us why you're the right candidate for this position..."
+              required
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12]"
+              placeholder="Why are you a good fit for this job?"
             />
           </div>
 
+          {/* CV Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Upload CV/Resume *
+              Upload CV / Resume *
             </label>
-            <div className="space-y-3">
-              <input
-                type="file"
-                required
-                accept=".pdf,.doc,.docx,.jpg,.png"
-                onChange={handleFileChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#1b6b12] focus:border-[#1b6b12] transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-[#1b6b12] hover:file:bg-green-100"
-              />
-              {uploadProgress > 0 && uploadProgress < 100 && (
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div
-                    className="bg-[#1b6b12] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${uploadProgress}%` }}
-                  ></div>
-                </div>
-              )}
-              {uploadProgress === 100 && (
-                <div className="text-[#1b6b12] text-sm font-semibold flex items-center space-x-2">
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                  <span>File uploaded successfully!</span>
-                </div>
-              )}
-            </div>
+            <input
+              type="file"
+              name="CV"
+              required
+              accept=".pdf,.doc,.docx,.jpg,.png"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-50 file:text-[#1b6b12]"
+            />
             <p className="text-xs text-gray-500 mt-2">
-              Supported formats: PDF, DOC, DOCX, JPG, PNG (Max: 5MB)
+              PDF, DOC, DOCX, JPG, PNG — max 5MB
             </p>
           </div>
 
+          {/* Buttons */}
           <div className="flex space-x-4 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all duration-300 font-semibold"
+              className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 font-semibold"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="flex-1 bg-[#1b6b12] text-white py-3 px-4 rounded-xl hover:bg-[#155a0d] transition-all duration-300 font-semibold shadow-lg hover:shadow-xl"
+              className="flex-1 bg-[#1b6b12] text-white py-3 px-4 rounded-xl hover:bg-[#155a0d] font-semibold shadow-lg"
             >
               Submit Application
             </button>
@@ -575,7 +506,7 @@ const SharePopup: React.FC<{
       icon: "📘",
       color: "bg-blue-500 hover:bg-blue-600",
       url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-        shareUrl
+        shareUrl,
       )}`,
     },
     {
@@ -583,7 +514,7 @@ const SharePopup: React.FC<{
       icon: "🐦",
       color: "bg-sky-400 hover:bg-sky-500",
       url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-        shareText
+        shareText,
       )}&url=${encodeURIComponent(shareUrl)}`,
     },
     {
@@ -591,7 +522,7 @@ const SharePopup: React.FC<{
       icon: "💼",
       color: "bg-blue-600 hover:bg-blue-700",
       url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-        shareUrl
+        shareUrl,
       )}`,
     },
     {
@@ -599,7 +530,7 @@ const SharePopup: React.FC<{
       icon: "💚",
       color: "bg-green-500 hover:bg-green-600",
       url: `https://wa.me/?text=${encodeURIComponent(
-        shareText + " " + shareUrl
+        shareText + " " + shareUrl,
       )}`,
     },
     {

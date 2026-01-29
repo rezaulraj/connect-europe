@@ -3,7 +3,6 @@ import React, { useRef } from "react";
 import { FaYoutube, FaTiktok, FaPinterest } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
-import emailjs from "@emailjs/browser";
 
 const socialLinks = [
   {
@@ -38,31 +37,50 @@ const socialLinks = [
 export default function ContactArea() {
   const formRef = useRef<HTMLFormElement>(null);
 
-  const sendEmail = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const serviceID = "service_2240l9s";
-    const templateID = "template_ksx7o99";
-    const userID = "jKcEkgd1dwWX8suxQ";
-    if (!formRef.current) return;
-
-    emailjs.sendForm(serviceID, templateID, formRef.current, userID).then(
-      (result) => {
-        alert("Message sent successfully!");
-        formRef.current?.reset();
-        console.log("Email sent successfully:", result.text);
-      },
-      (error) => {
-        alert("Failed to send message. Please try again later.");
-        console.error(error);
-      }
-    );
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    // FormSubmit.io will handle everything automatically
+    // No JavaScript needed for basic functionality
+    console.log(e);
   };
+
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16">
-          {/* Left Column - Contact Form */}
-          <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
+          <form
+            ref={formRef}
+            onSubmit={handleSubmit}
+            action="https://formsubmit.co/da8df489f587737b7c1d54a0e94773b2"
+            method="POST"
+            className="space-y-6"
+          >
+            {/* FormSubmit Hidden Fields */}
+            <input
+              type="hidden"
+              name="_subject"
+              value="New Contact Form Submission - Connect Europe"
+            />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="text" name="_honey" style={{ display: "none" }} />
+            <input type="hidden" name="_template" value="table" />
+
+            {/* Redirect to thank you page after submission */}
+            <input
+              type="hidden"
+              name="_next"
+              value="https://connecteurope.uk/thank-you"
+            />
+
+            {/* Auto-response message */}
+            <input
+              type="hidden"
+              name="_autoresponse"
+              value="Thank you for contacting Connect Europe. We have received your message and will get back to you within 24 hours."
+            />
+
+            {/* Optional: Add your website URL */}
+            <input type="hidden" name="_url" value="https://connecteurope.uk" />
+
             <h1 className="text-[24px] font-bold text-heading">
               How Can We Help You?
             </h1>
@@ -75,75 +93,89 @@ export default function ContactArea() {
               <div className="flex flex-col">
                 <label
                   htmlFor="employee"
-                  className="text-sm font-bold text-heading mb-1">
+                  className="text-sm font-bold text-heading mb-1"
+                >
                   Position Needed
                 </label>
                 <select
                   name="position"
                   id="employee"
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white">
+                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary bg-white"
+                  required
+                >
+                  <option value="">Select a position</option>
                   <option value="Employee">Employee</option>
                   <option value="Workers">Workers</option>
+                  <option value="Consultant">Consultant</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
 
               <div className="flex flex-col">
                 <label
                   htmlFor="name"
-                  className="text-sm font-bold text-heading mb-1">
+                  className="text-sm font-bold text-heading mb-1"
+                >
                   Your Name
                 </label>
                 <input
                   type="text"
-                  name="user_name"
+                  name="name"
                   id="name"
                   required
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Enter your full name"
                 />
               </div>
 
               <div className="flex flex-col">
                 <label
                   htmlFor="email"
-                  className="text-sm font-bold text-heading mb-1">
+                  className="text-sm font-bold text-heading mb-1"
+                >
                   Email Address
                 </label>
                 <input
                   type="email"
-                  name="user_email"
+                  name="email"
                   id="email"
                   required
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Enter your email address"
                 />
               </div>
 
               <div className="flex flex-col">
                 <label
                   htmlFor="phone"
-                  className="text-sm font-bold text-heading mb-1">
+                  className="text-sm font-bold text-heading mb-1"
+                >
                   Phone Number
                 </label>
                 <input
                   type="tel"
-                  name="user_phone"
+                  name="phone"
                   id="phone"
                   required
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Enter your phone number"
                 />
               </div>
 
               <div className="flex flex-col">
                 <label
-                  htmlFor="report"
-                  className="text-sm font-bold text-heading mb-1">
+                  htmlFor="message"
+                  className="text-sm font-bold text-heading mb-1"
+                >
                   Message / Job Description
                 </label>
                 <textarea
-                  id="report"
+                  id="message"
                   name="message"
                   rows={4}
                   required
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                  placeholder="Please provide details about your requirements..."
                 />
               </div>
             </div>
@@ -152,6 +184,8 @@ export default function ContactArea() {
               <input
                 type="checkbox"
                 id="consent"
+                name="consent"
+                value="GDPR Consent Given"
                 required
                 className="h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
               />
@@ -164,7 +198,8 @@ export default function ContactArea() {
             <div className="pt-4 border-t border-gray-200">
               <button
                 type="submit"
-                className="bg-primary hover:bg-heading cursor-pointer text-white px-6 py-3 rounded-md font-semibold transition-all">
+                className="bg-primary hover:bg-heading cursor-pointer text-white px-6 py-3 rounded-md font-semibold transition-all"
+              >
                 Send Request
               </button>
             </div>
@@ -177,9 +212,6 @@ export default function ContactArea() {
               <h2 className="text-[24px] font-semibold text-heading ">
                 Contact information
               </h2>
-              {/* <p className="text-[16px] text-gray-600">
-                Killary Janunkova 2 | Banská Bystrica | 97401 | Slovakia
-              </p> */}
               <div className="flex flex-col space-y-4 mt-6">
                 <address className="not-italic  cursor-pointer space-y-1 mt-20 ">
                   <p className="text-heading font-bold text-[20px]">
@@ -191,8 +223,9 @@ export default function ContactArea() {
                     back to you shortly.
                   </p>
                   <a
-                    href="mailto:contact@connecteurope.agency"
-                    className="text-[20px] text-primary">
+                    href="mailto:contact@connecteurope.uk"
+                    className="text-[20px] text-primary"
+                  >
                     contact@connecteurope.uk
                   </a>
                 </address>
@@ -202,7 +235,8 @@ export default function ContactArea() {
                   </p>
                   <a
                     href="tel:+421948123456"
-                    className="text-[20px] text-primary">
+                    className="text-[20px] text-primary"
+                  >
                     +421 948 123 456
                   </a>
                 </address>
@@ -245,7 +279,8 @@ export default function ContactArea() {
                         rel="noopener noreferrer"
                         className={`w-10 h-10 bg-primary group p-2 rounded-md flex items-center hover:bg-heading duration-200 cursor-pointer justify-center ${
                           index !== 0 ? "ml-0" : ""
-                        }`}>
+                        }`}
+                      >
                         {item.icon}
                       </a>
                     ))}

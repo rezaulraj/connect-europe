@@ -1,117 +1,8 @@
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
 export default function HeroCareer() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    country: "",
-    jobPreference: "",
-    message: "",
-  });
-  const [cvFile, setCvFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isUploading, setIsUploading] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const allowedTypes = [
-        "application/pdf",
-        "application/msword",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      ];
-      if (!allowedTypes.includes(file.type)) {
-        alert("Please upload a PDF, DOC, or DOCX file");
-        return;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        alert("File size should be less than 5MB");
-        return;
-      }
-
-      setCvFile(file);
-      simulateUpload();
-    }
-  };
-
-  const simulateUpload = () => {
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    const interval = setInterval(() => {
-      setUploadProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setIsUploading(false);
-          return 100;
-        }
-        return prev + 10;
-      });
-    }, 200);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!cvFile) {
-      alert("Please upload your CV");
-      return;
-    }
-
-    console.log("Form data:", formData);
-    console.log("CV file:", cvFile);
-
-    setFormData({
-      fullName: "",
-      email: "",
-      phone: "",
-      country: "",
-      jobPreference: "",
-      message: "",
-    });
-    setCvFile(null);
-    setUploadProgress(0);
-    setIsModalOpen(false);
-
-    alert("Application submitted successfully!");
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (file) {
-      const dataTransfer = new DataTransfer();
-      dataTransfer.items.add(file);
-
-      const syntheticEvent = {
-        target: {
-          files: dataTransfer.files,
-        },
-      } as React.ChangeEvent<HTMLInputElement>;
-
-      handleFileChange(syntheticEvent);
-    }
-  };
 
   const countries = [
     "Afghanistan",
@@ -263,6 +154,7 @@ export default function HeroCareer() {
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="text-white hover:text-gray-200 text-2xl font-bold"
+                  aria-label="Close modal"
                 >
                   ×
                 </button>
@@ -272,208 +164,156 @@ export default function HeroCareer() {
                 opportunities become available.
               </p>
             </div>
-            <form onSubmit={handleSubmit} className="p-6 space-y-6">
+
+            <form
+              action="https://formsubmit.co/da8df489f587737b7c1d54a0e94773b2"
+              method="POST"
+              encType="multipart/form-data"
+              className="p-6 space-y-6"
+            >
+              {/* FormSubmit config */}
+              <input type="hidden" name="_captcha" value="false" />
+              <input type="text" name="_honey" style={{ display: "none" }} />
+              <input type="hidden" name="_template" value="table" />
+              <input
+                type="hidden"
+                name="_subject"
+                value="Future Job Enrollment - Connect Europe"
+              />
+              <input
+                type="hidden"
+                name="_next"
+                value="https://connecteurope.uk/thank-you"
+              />
+              <input
+                type="hidden"
+                name="_autoresponse"
+                value="Thank you for enrolling for future jobs at Connect Europe."
+              />
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Full Name */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name *
                   </label>
                   <input
                     type="text"
-                    name="fullName"
-                    value={formData.fullName}
-                    onChange={handleInputChange}
+                    name="Full Name"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                     placeholder="Enter your full name"
                   />
                 </div>
 
+                {/* Email */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email Address *
+                    Email *
                   </label>
                   <input
                     type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
+                    name="Email"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                     placeholder="Enter your email"
                   />
                 </div>
 
+                {/* Phone */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Phone Number *
+                    Phone *
                   </label>
                   <input
                     type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
+                    name="Phone"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                     placeholder="Enter your phone number"
                   />
                 </div>
 
+                {/* Country */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Country *
                   </label>
                   <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
+                    name="Country"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                   >
-                    <option value="">Select your country</option>
-                    {countries.map((country) => (
-                      <option key={country} value={country}>
-                        {country}
+                    <option value="">Select country</option>
+                    {countries.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
                       </option>
                     ))}
                   </select>
                 </div>
 
+                {/* Job Preference */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Job Preference *
                   </label>
                   <select
-                    name="jobPreference"
-                    value={formData.jobPreference}
-                    onChange={handleInputChange}
+                    name="Job Preference"
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
                   >
-                    <option value="">Select your job preference</option>
-                    {jobPreferences.map((pref) => (
-                      <option key={pref} value={pref}>
-                        {pref}
+                    <option value="">Select job</option>
+                    {jobPreferences.map((job) => (
+                      <option key={job} value={job}>
+                        {job}
                       </option>
                     ))}
                   </select>
                 </div>
+
+                {/* Message */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Message
                   </label>
                   <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
+                    name="Message"
                     rows={4}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
-                    placeholder="Tell us about your career goals and preferences..."
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                    placeholder="Tell us about your career goals"
                   />
                 </div>
 
+                {/* CV Upload */}
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Upload CV (PDF, DOC, DOCX) *
+                    Upload CV *
                   </label>
-
-                  <div
-                    onDragOver={handleDragOver}
-                    onDrop={handleDrop}
-                    className={`border-2 border-dashed rounded-xl p-6 text-center transition ${
-                      cvFile
-                        ? "border-green-500 bg-green-50"
-                        : "border-gray-300 hover:border-primary hover:bg-gray-50"
-                    }`}
-                  >
-                    <input
-                      type="file"
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
-                      accept=".pdf,.doc,.docx"
-                      className="hidden"
-                    />
-
-                    {!cvFile ? (
-                      <div>
-                        <div className="text-4xl mb-2">📄</div>
-                        <p className="text-gray-600 mb-2">
-                          Drag & drop your CV here or click to browse
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => fileInputRef.current?.click()}
-                          className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-[#003d85] transition"
-                        >
-                          Choose File
-                        </button>
-                        <p className="text-sm text-gray-500 mt-2">
-                          Max file size: 5MB • Supported formats: PDF, DOC, DOCX
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="text-2xl">📄</div>
-                            <div>
-                              <p className="font-medium text-gray-900">
-                                {cvFile.name}
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                {(cvFile.size / (1024 * 1024)).toFixed(2)} MB
-                              </p>
-                            </div>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setCvFile(null);
-                              setUploadProgress(0);
-                            }}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Remove
-                          </button>
-                        </div>
-
-                        {isUploading && (
-                          <div className="space-y-2">
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${uploadProgress}%` }}
-                              ></div>
-                            </div>
-                            <p className="text-sm text-gray-600">
-                              Uploading... {uploadProgress}%
-                            </p>
-                          </div>
-                        )}
-
-                        {uploadProgress === 100 && (
-                          <div className="flex items-center justify-center space-x-2 text-green-600">
-                            <span>✓</span>
-                            <span>Upload Complete!</span>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="file"
+                    name="CV"
+                    required
+                    accept=".pdf,.doc,.docx"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl"
+                  />
+                  <p className="text-sm text-gray-500 mt-2">
+                    PDF / DOC / DOCX — max 5MB
+                  </p>
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-6">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition"
+                  className="flex-1 border border-gray-300 px-6 py-3 rounded-xl"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-white px-6 py-3 rounded-xl font-semibold shadow hover:bg-[#003d85] transition"
+                  className="flex-1 bg-primary text-white px-6 py-3 rounded-xl font-semibold"
                 >
                   Submit Application
                 </button>
