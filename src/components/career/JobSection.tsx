@@ -21,13 +21,6 @@ interface Job {
   Status: string;
 }
 
-interface ApplyFormData {
-  fullName: string;
-  email: string;
-  phone: string;
-  coverLetter: string;
-  cv: File | null;
-}
 
 const categoryDescriptions = {
   all: "Browse all available job opportunities across various industries and locations.",
